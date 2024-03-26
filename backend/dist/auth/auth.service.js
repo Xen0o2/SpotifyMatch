@@ -23,6 +23,9 @@ let AuthService = class AuthService {
         };
         return this.jwtService.sign(payload);
     }
+    refresh() {
+        return this;
+    }
 };
 exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([

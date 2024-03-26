@@ -10,7 +10,10 @@ class SpotifyOauthStrategy extends (0, passport_1.PassportStrategy)(passport_spo
             clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
             callbackURL: process.env.CALLBACK_URL,
             scope: `user-read-private
+           user-read-recently-played
            user-read-email
+           user-top-read
+           user-read-playback-state
            playlist-modify-private
            playlist-read-collaborative
            playlist-read-private

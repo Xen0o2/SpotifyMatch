@@ -3,12 +3,11 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import { SpotifyService } from './spotify/spotify.service';
-import { ProfileController } from './profile/profile.controller';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [AuthModule, ConfigModule.forRoot({ isGlobal: true })],
-  controllers: [AppController, ProfileController],
-  providers: [AppService, SpotifyService],
+  controllers: [AppController],
+  providers: [AppService, UserService],
 })
 export class AppModule {}

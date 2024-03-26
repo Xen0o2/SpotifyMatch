@@ -1,0 +1,71 @@
+.login-body {
+	width: 100vw;
+	height: 100vh;
+	background-color: #191414;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.login-container {
+	height: 50%;
+	width: 45%;
+	min-width: 500px;
+	border-radius: 16px;
+	background-color: #030707;
+	display: flex;
+	box-shadow: 0px 2px 500px 2px #1DB95499;
+
+}
+
+.login-image {
+	width: 60%;
+	height: 100%;
+	object-fit: cover;
+	border-radius: 16px 0 0 16px;
+	/* background: url("../../assets/images/login_image.png"); */
+	/* background: linear-gradient(to left, #030707, 30%, transparent), linear-gradient(to right, #1DB954, 30%, transparent), url("../../assets/images/login_image.png"); */
+	background: linear-gradient(to left, #030707, 50%, transparent), url("../../assets/images/login_image.png");
+	background-position: center center;
+	background-repeat: no-repeat;
+	background-size: cover;
+}
+
+.login-button-container {
+	width: 40%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: 50px;
+}
+
+.login-spotify-logo {
+	height: 100px;
+	width: auto;
+}
+
+.login-button {
+	width: 70%;
+	min-width: 200px;
+	font-size: 1.3rem;
+	font-weight: bold;
+	padding: 16px 8px 16px 8px;
+	background-color: #1DB954;
+	border: none;
+	border-radius: 500px;
+	text-align: center;
+	cursor: pointer;
+	text-decoration: none;
+	color: black;
+	transition-duration: 0.2s;
+}
+
+.login-button:hover {
+	transform: scale(1.1);
+	background-color: #1cc55a;
+}
+
+.login-button:active {
+	background-color: #21b457;
+}

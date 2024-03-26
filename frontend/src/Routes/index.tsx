@@ -1,10 +1,17 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import UserHomePage from "../component/HomePage/UserHomePage";
+
+import NotFound from "../component/404/NotFound";
+import Friends from "../component/Friends/Friends";
+import Homepage from "../component/HomePage/Homepage";
 import Login from "../component/Login/Login";
 import Redirect from "../component/Login/Redirect";
 import Logout from "../component/Logout/Logout";
+import MyTop from "../component/MyTop/MyTop";
+import Statistics from "../component/Statistics/Statistics";
+
 import { useAuth } from "../Provider/AuthProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
+import AlbumDetails from "../component/Album/AlbumDetails";
 
 const Routes = () => {
 	const { token } = useAuth();
@@ -13,11 +20,7 @@ const Routes = () => {
 		{
 			path: "/service",
 		  	element: <div>Service Page</div>,
-		},
-		{
-		  	path: "/about-us",
-		  	element: <div>About Us</div>,
-		},
+		}
 	];
 	
 	const routesForAuthenticatedOnly = [
@@ -27,15 +30,39 @@ const Routes = () => {
 			children: [
 				{
 					path: "/",
-					element: <UserHomePage />,
+					element: <Homepage children={<MyTop />}/>,
 				},
 				{
-					path: "/profile",
-					element: <div>User Profile</div>,
+					path: "/top",
+					element: <Homepage children={<MyTop />}/>,
+				},
+				{
+					path: "/friends",
+					element: <Homepage children={<Friends />} />,
+				},
+				{
+					path: "/statistics",
+					element: <Homepage children={<Statistics />} />,
 				},
 				{
 					path: "/logout",
 					element: <Logout />,
+				},
+				{
+					path: "/track/:trackId",
+					element: <Homepage children={<AlbumDetails />} />,
+				},
+				{
+					path: "/artist/:artistId",
+					element: <Logout />,
+				},
+				{
+					path: "/album/:albumId",
+					element: <Homepage children={<AlbumDetails />} />,
+				},
+				{
+					path: "*",
+					element: <NotFound />,
 				},
 			],
 		},
@@ -44,14 +71,14 @@ const Routes = () => {
 	const routesForNotAuthenticatedOnly = [
 		{
 			path: "/",
-			element: <div>Home Page</div>,
+			element: <Login />,
 		},
 		{
 			path: "/login",
 		  	element: <Login />,
 		},
 		{
-			path: "/redirect/:jwt",
+			path: "/redirect",
 			element: <Redirect />
 		}
 	];

@@ -12,16 +12,15 @@ const config_1 = require("@nestjs/config");
 const app_controller_1 = require("./app.controller");
 const app_service_1 = require("./app.service");
 const auth_module_1 = require("./auth/auth.module");
-const spotify_service_1 = require("./spotify/spotify.service");
-const profile_controller_1 = require("./profile/profile.controller");
+const user_service_1 = require("./user/user.service");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [auth_module_1.AuthModule, config_1.ConfigModule.forRoot({ isGlobal: true })],
-        controllers: [app_controller_1.AppController, profile_controller_1.ProfileController],
-        providers: [app_service_1.AppService, spotify_service_1.SpotifyService],
+        controllers: [app_controller_1.AppController],
+        providers: [app_service_1.AppService, user_service_1.UserService],
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

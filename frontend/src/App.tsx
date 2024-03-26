@@ -1,15 +1,16 @@
 import './App.css';
 
-import Login from './component/Login/Login';
-
 import AuthProvider from './Provider/AuthProvider';
+import SpotifyProvider from './Provider/SpotifyProvider';
 import Routes from './Routes';
 
 function App() {
   	return (
-		<AuthProvider>
-			<Routes />
-		</AuthProvider>
+		<SpotifyProvider>
+			<AuthProvider>
+				<Routes />
+			</AuthProvider>
+		</SpotifyProvider>
 	);
 }
 

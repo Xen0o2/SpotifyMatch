@@ -1,20 +1,21 @@
-import { useAuth } from "../../Provider/AuthProvider";
-import { useNavigate } from "react-router-dom";
+import "./Login.css"
+
+import logo from "../../assets/images/spotify_logo.png";
+import image from "../../assets/images/login_image.png";
 
 export default function Login() {
-	const { setToken } = useAuth();
-	const navigate = useNavigate();
-  
-	if (!setToken) throw new Error("No setToken");
+	
+	const login_url = "http://localhost:8080/auth/redirect";
 
-	const handleLogin = () => {
-	  setToken("this is a test token");
-	  navigate("/", { replace: true });
-	};
-
-	const login_url = "http://localhost:8080/auth/redirect"
-  
 	return (
-		<a href={login_url}>login with spotify</a>
+		<div className="login-body">
+			<div className="login-container">
+				<div className="login-image"></div>
+				<div className="login-button-container">
+					<img className="login-spotify-logo" src={logo} />
+					<a className="login-button" href={login_url}>Se Connecter</a>
+				</div>
+			</div>
+		</div>
 	);
 };

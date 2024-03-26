@@ -1,0 +1,101 @@
+$lightBlack: #121212;
+$grey: #A7A7A7;
+$lightGrey: #2b2b2b;
+$green: #1CD760;
+$darkGreen: #095826;
+
+.home-body-bigtracklist {
+	display: flex;
+	gap: 15px;
+	overflow: auto;
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+
+	.home-body-bigtracklist-element {
+		position: relative;
+		width: 125px;
+		transition-duration: 0.2s;
+		border-radius: 16px;
+		cursor: pointer;
+		padding-top: 10px;
+		text-decoration: none;
+		color: white;
+
+		&:last-child {
+			padding-right: 20px;
+		}
+
+		&:hover {
+			padding: 10px;
+			background-color: $lightGrey;
+			border-radius: 20px;
+		}
+		&:hover img {
+			opacity: 0.3;
+		}
+		&:hover .home-body-bigtracklist-timesince {
+			display: flex;
+		}
+
+		img, .bigtracklist-template-cover {
+			position: relative;
+			height: 125px;
+			width: 125px;
+			object-fit: cover;
+			border-radius: 16px;
+			transition-duration: 0.2s;
+			background: linear-gradient(to right, $lightGrey 20%, $lightBlack 40%, $lightBlack 60%, $lightGrey 80%);
+			background-size: 200% auto;
+			animation: shine 1.5s linear infinite;
+		}
+
+		.home-body-bigtracklist-timesince {
+			position: absolute;
+			width: calc(100% - 20px);
+			height: 70%;
+			font-family: circularBold;
+			color: $green;
+			display: none;
+			justify-content: center;
+			align-items: center;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			z-index: 2;
+		}
+
+		.home-body-bigtracklist-label {
+			font-size: 1.5rem;
+			
+			.home-body-bigtracklist-label-title {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			
+			.home-body-bigtracklist-label-subtitle {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				color: $grey;
+				font-size: 1rem;
+			}
+			
+			.bigtracklist-template-label-title {
+				margin-top: 10px;
+				width: 100px;
+				height: 12px;
+				border-radius: 500px;
+				background-color: $lightGrey;
+			}
+			
+			.bigtracklist-template-label-subtitle {
+				margin-top: 10px;
+				width: 130px;
+				height: 12px;
+				border-radius: 500px;
+				background-color: $lightGrey;
+			}
+		}
+	}
+}

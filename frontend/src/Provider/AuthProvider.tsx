@@ -11,21 +11,34 @@ interface AuthProviderProps {
 	children: React.ReactNode;
 }
 const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [token, setToken_] = useState<string | null>(localStorage.getItem("token"));
+  const [token, setToken_] = useState<string | null>(localStorage.getItem("jwt_token"));
 
   const setToken = (newToken: string | null) => {
 	setToken_(newToken);
-	console.log("je mets", newToken);
 	if (newToken)
-		localStorage.setItem("token", newToken);
+		localStorage.setItem("jwt_token", newToken);
 	else
-		localStorage.removeItem("token");
-	console.log(localStorage)
+		localStorage.removeItem("jwt_token");
   };
 
+	// const refreshTokens = async () => {
+	// 	console.log("requête")
+	// 	const response = await axios.get("http://localhost:8080/auth/refresh");
+	// 	console.log(response);
+  	// }
+
   useEffect(() => {
-    	if (token)
-      		axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+    	if (token) {
+			try {
+				const information = JSON.parse(atob(token.split(".")[1]));
+				if (information.exp * 1000 <= Date.now()){
+					localStorage.clear();
+				}
+			} catch(e) {
+				console.log(e)
+			}
+			axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+		}
     	else
 			delete axios.defaults.headers.common["Authorization"];
 	}, [token]);

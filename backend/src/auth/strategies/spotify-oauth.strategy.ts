@@ -13,7 +13,10 @@ export class SpotifyOauthStrategy extends PassportStrategy(
         callbackURL: process.env.CALLBACK_URL,
         scope:
           `user-read-private
+           user-read-recently-played
            user-read-email
+           user-top-read
+           user-read-playback-state
            playlist-modify-private
            playlist-read-collaborative
            playlist-read-private

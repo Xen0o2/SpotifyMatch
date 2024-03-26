@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "MatchRoom" ALTER COLUMN "idRoom" SET DATA TYPE TEXT;

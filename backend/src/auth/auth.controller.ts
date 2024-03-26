@@ -5,6 +5,12 @@ import { AuthService } from './auth.service';
 import { SpotifyOauthGuard } from './guards/spotify-oauth.guard';
 import { Profile } from 'passport-spotify';
 
+interface refreshTokens {
+	jwt_token: string;
+	access_token: string;
+	refresh_token: string;
+}
+
 @Controller('auth')
 export class AuthController {
 	constructor(private readonly authService: AuthService) {}
@@ -35,4 +41,9 @@ export class AuthController {
 		const jwt = this.authService.login(user);
 		res.redirect(`http://localhost:3000/redirect?jwt=${jwt}&access_token=${authInfo.accessToken}&refresh_token=${authInfo.refreshToken}`);
 	}
+
+	// @Get("refresh/:jwt_token/:refresh_token")
+	// async refreshToken(): Promise<refreshTokens> {
+	// 	return { jwt_token: "", access_token: "", refresh_token: "" };
+	// }
 }

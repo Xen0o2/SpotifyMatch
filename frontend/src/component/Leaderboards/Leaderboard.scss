@@ -1,0 +1,91 @@
+$lightBlack: #121212;
+$grey: #A7A7A7;
+$lightGrey: #212121;
+$green: #1CD760;
+$darkGreen: #095826;
+
+.home-body-leaderboard {
+	display: flex;
+	padding-left: 60px;
+	gap: 100px;
+	overflow: auto;
+
+	.home-body-leaderboard-element {
+		position: relative;
+		width: 145px;
+		transition-duration: 0.2s;
+		border-radius: 16px;
+		cursor: pointer;
+		text-decoration: none;
+		color: white;
+
+		&:hover .home-body-leaderboard-rank {
+			color: white;
+			transform: rotate(0deg) translate(-65px, -30px);
+			-webkit-text-stroke-color: transparent;
+		}
+
+		.home-body-leaderboard-rank {
+			position: absolute;
+			font-size: 10rem;
+			font-family: circularBold;
+			color: transparent;
+			transform: rotate(-17deg) translate(-45px, -50px);
+			-webkit-text-stroke-width: 1px;
+			-webkit-text-stroke-color: white;
+			transition-duration: 0.5s;
+		}
+
+		img, .leaderboard-template-cover {
+			position: relative;
+			height: 125px;
+			width: 125px;
+			object-fit: cover;
+			border-radius: 16px;
+			transition-duration: 0.5s;
+			background: linear-gradient(to right, $lightGrey 20%, $lightBlack 40%, $lightBlack 60%, $lightGrey 80%);
+			background-size: 200% auto;
+			animation: shine 1.5s linear infinite;
+		}
+
+		.home-body-leaderboard-label {
+			font-size: 1.5rem;
+			
+			.home-body-leaderboard-label-title {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+			
+			.home-body-leaderboard-label-subtitle {
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				color: $grey;
+				font-size: 1rem;
+			}
+
+			.leaderboard-template-label-title {
+				margin-top: 10px;
+				width: 100px;
+				height: 12px;
+				border-radius: 500px;
+				background-color: $lightGrey;
+			}
+			
+			.leaderboard-template-label-subtitle {
+				margin-top: 10px;
+				width: 130px;
+				height: 12px;
+				border-radius: 500px;
+				background-color: $lightGrey;
+			}
+		}
+	}
+}
+
+@keyframes shine {
+	to {
+		background-position: 200% center;
+	}
+}

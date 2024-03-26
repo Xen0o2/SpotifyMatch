@@ -1,0 +1,81 @@
+$lightBlack: #121212;
+$grey: #A7A7A7;
+$lightGrey: #2b2b2b;
+$green: #1CD760;
+$darkGreen: #095826;
+
+.album-details-body {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	font-size: 1rem;
+	// background-color: red;
+	margin-top: 40px;
+	width: 90%;
+	margin-inline: 5%;
+	color: white;
+
+	.album-details-header {
+		display: flex;
+		align-items: center;
+		gap: 20px;
+
+		.album-details-cover {
+			height: 180px;
+			width: 180px;
+			border-radius: 8px;
+			box-shadow: 15px 15px 20px 0 #121212;
+		}
+
+		.album-details-header-section {
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+
+			.album-details-header-title {
+				font-size: 3rem;
+				font-family: circularBold;
+			}
+
+			.album-details-header-subtitle {
+				color: $grey
+			}
+		}
+	}
+
+	.album-details-section {
+		display: flex;
+		height: 270px;
+
+		.album-details-artists {
+			width: 40%;
+
+			.album-details-artists-content {
+				display: flex;
+				flex-direction: column;
+				gap: 1px;
+				margin-top: 10px;
+			}
+		}
+
+		.album-details-tracks {
+			width: 60%;
+			
+			.album-details-tracks-content {
+				height: 90%;
+				display: flex;
+				flex-direction: column;
+				overflow: auto;
+				margin-top: 10px;
+				scrollbar-color: $green transparent;
+				-webkit-scrollbar-color: $green transparent;
+			}
+		}
+	}
+
+	.album-details-albums-content {
+		display: flex;
+		gap: 15px;
+		overflow: auto;
+	}
+}

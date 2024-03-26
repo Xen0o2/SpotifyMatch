@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Music" ALTER COLUMN "idSpotify" SET DATA TYPE TEXT;
