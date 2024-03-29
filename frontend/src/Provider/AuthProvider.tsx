@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { redirect } from "react-router-dom";
 
 interface AuthContextProps {
 	token: string | null;
@@ -33,6 +34,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 				const information = JSON.parse(atob(token.split(".")[1]));
 				if (information.exp * 1000 <= Date.now()){
 					localStorage.clear();
+					redirect("/")
 				}
 			} catch(e) {
 				console.log(e)

@@ -1,49 +1,62 @@
 import "./Homepage.scss"
 
-import { useSpofity } from "../../Provider/SpotifyProvider";
-
-import HomepageFriends from "../Friends/Friends";
-import MyTop from "../MyTop/MyTop";
-import HomepageStatistics from "../Statistics/Statistics";
 import { Link, useLocation } from "react-router-dom";
 import Rooms from "../Rooms/Rooms";
 import React, { useEffect, useState } from "react";
-import { Track, Artist, Album } from "../../Models/Spotify";
-import { LargeTrackElement, LargeArtistElement, LargeAlbumElement } from "../SpotifyElements/SpotifyElements";
-import TemplateBigTracklist from "../Tracklist/BigTracklist/TemplateBigTracklist";
+import { Track, Artist, Album, SpotifyUser } from "../../Models/Spotify";
+import UserPopup from "../Popup/UserPopup";
+import { User } from "../../Models/Database";
+import { useSpofity } from "../../Provider/SpotifyProvider";
+import SearchResults from "../SearchResults/SearchResults";
+import Cookies from "js-cookie";
+import { useApi } from "../../Provider/ApiProvider";
 
-interface searchResultsProps {
-	tracks: Track[],
-	artists: Artist[],
-	albums: Album[]
+export interface inputSearchResultsProps {
+	users?: User[]
+	tracks?: Track[],
+	artists?: Artist[],
+	albums?: Album[]
 }
 
 export default function Homepage({ children }: { children: React.ReactNode}) {
-
-	const defaultResults: searchResultsProps = { tracks: [], artists: [], albums: [] };
-	
 	const location = useLocation();
 	const SpotifyApi = useSpofity();
+	const api = useApi();
 
+	const [me, setMe] = useState<SpotifyUser | null>();
+	const [showUserPopup, setShowUserPopup] = useState(false);
 	const [searchInput, setSearchInput] = useState("");
-	const [searchResults, setSearchResults] = useState(defaultResults);
+	const [inputSearchResults, setInputSearchResults] = useState<inputSearchResultsProps>({});
 	const [loadingSearch, setLoadingSearch] = useState(false);
+	const [update, setUpdate] = useState(false);
 
 	const path = window.location.href;
-	const arg = path.split("/")[path.split("/").length - 1] as keyof typeof components;
+	const arg = path.split("/")[path.split("/").length - 1];
 
-	const components = {
-		"": <MyTop />,
-		top: <MyTop />,
-		friends: <HomepageFriends />,
-		statistics: <HomepageStatistics />
+	const searchForUsers = async () => {
+		const response = await api?.get(`/user/findByUsername`, { params: { username: searchInput } });
+		if (!response)
+			throw new Error("FindByUsername request failed");
+		setInputSearchResults({ users: response.data })
+		setLoadingSearch(false);
+	}
+
+	const searchTrackArtistAlbum = async () => {
+		const results = await SpotifyApi?.search(searchInput, [ "track", "artist", "album" ]);
+		setInputSearchResults({ tracks: results?.tracks?.items || [], artists: results?.artists?.items || [], albums: results?.albums?.items || []})
+		setLoadingSearch(false);
 	}
 
 	const search = async () => {
 		try {
-			const results = await SpotifyApi?.search(searchInput, [ "track", "artist", "album" ]);
-			setSearchResults({ tracks: results?.tracks?.items || [], artists: results?.artists?.items || [], albums: results?.albums?.items || []})
-			setLoadingSearch(false);
+			switch (arg) {
+				case "friends":
+					await searchForUsers();
+					break;
+				default:
+					await searchTrackArtistAlbum();
+					break;
+			}
 		} catch(e) {
 			setLoadingSearch(false);
 			console.log(e)
@@ -53,19 +66,39 @@ export default function Homepage({ children }: { children: React.ReactNode}) {
 	useEffect(() => {
 		setLoadingSearch(true);
 		if (searchInput.length == 0)
-			setSearchResults(defaultResults);
+			setInputSearchResults({});
 		else {
+			if (arg == "friends")
+				setInputSearchResults({users: []});
+			else
+				setInputSearchResults({tracks: [], artists: [], albums: []});
 			let timeout: ReturnType<typeof setTimeout>;
 			timeout = setTimeout(async () => {
 				search()
 			}, 800);
 			return () => clearTimeout(timeout)
 		}
-	}, [searchInput])
+	}, [searchInput, update])
+
+	const getMe = async () => {
+		try {
+			const meRequest = await SpotifyApi?.getMe();
+			if (meRequest) {
+				setMe(meRequest);
+				if (!Cookies.get("id") || Cookies.get("id") != meRequest.id)
+					Cookies.set("id", meRequest.id)
+			} else throw new Error();
+		} catch(e) {
+			console.log(e)
+		}
+	}
+
+	useEffect(() => {
+		getMe();
+	}, [])
 
 	useEffect(() => {
 		setSearchInput("");
-		console.log(location)
 	}, [location])
 	
 	return (
@@ -84,50 +117,18 @@ export default function Homepage({ children }: { children: React.ReactNode}) {
 						<li><Link to="/friends" className={`home-body-nav-element ${arg == "friends" ? "selected" : ""}`}>Friends</Link></li>
 						<li><Link to="/statistics" className={`home-body-nav-element ${arg == "statistics" ? "selected" : ""}`}>Statistics</Link></li>
 					</nav>
-					<input className="home-body-search-input" type="text" placeholder="Looking for something ?" onChange={(e) => setSearchInput(e.target.value)} value={searchInput}/>
-					<div className="home-body-user">
-						<span>Alex</span>
-						<img src="https://c.wallhere.com/photos/2f/af/fire-145392.jpg!d" alt="" />
+					<input className="home-body-search-input" type="text" placeholder={`Looking for ${arg == `friends` ? `someone` : `something`} ?`} onChange={(e) => setSearchInput(e.target.value)} value={searchInput}/>
+					<div className="home-body-user" onClick={() => { setShowUserPopup(old => !old) }} onMouseLeave={() => { setShowUserPopup(false) }}>
+						<div>
+							{me && me.display_name && <span className="home-body-user-name">{me.display_name}</span>}
+							{me && me.images && <img src={me.images[me.images.length - 1]?.url} alt="" />}
+						</div>
+						{showUserPopup && <UserPopup />}
 					</div>
 				</div>
-				{searchInput.length > 0 ?
-					<div className="home-body-content">
-						<div className="home-body-category">
-							<div className="home-body-category-header">
-								<h1>Tracks</h1>
-								<button>Show more</button>
-							</div>
-							<div className="home-body-bigtracklist">
-							{ searchResults.tracks.length == 0 && !loadingSearch && <span>No result found</span>}
-							{ searchResults.tracks.length == 0 && loadingSearch && <TemplateBigTracklist />}
-							{ searchResults.tracks.map((track: Track, index) => (
-								<LargeTrackElement track={track} key={index} />	
-							))}
-							</div>
-							<div className="home-body-category-header">
-								<h1>Artists</h1>
-								<button>Show more</button>
-							</div>
-							<div className="home-body-bigtracklist">
-							{ searchResults.artists.length == 0 && !loadingSearch && <span>No result found</span>}
-							{ searchResults.artists.length == 0 && loadingSearch && <TemplateBigTracklist />}
-							{ searchResults.artists.map((artist: Artist, index) => (
-								<LargeArtistElement artist={artist} key={index} />	
-							))}
-							</div>
-							<div className="home-body-category-header">
-								<h1>Albums</h1>
-								<button>Show more</button>
-							</div>
-							<div className="home-body-bigtracklist">
-							{ searchResults.albums.length == 0 && !loadingSearch && <span>No result found</span>}
-							{ searchResults.albums.length == 0 && loadingSearch && <TemplateBigTracklist />}
-							{ searchResults.albums.map((album: Album, index) => (
-								<LargeAlbumElement album={album} key={index} />	
-							))}
-							</div>
-						</div>
-					</div> : children
+				{searchInput.length > 0 ? 
+					<SearchResults inputSearchResults={inputSearchResults} loadingSearch={loadingSearch} setUpdate={setUpdate}/> :
+					children
 				}
 			</div>
 		</div>

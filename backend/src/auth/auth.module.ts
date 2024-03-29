@@ -6,9 +6,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { UserService } from 'src/user/user.service';
+import { UserModule } from 'src/user/user.module';
 
 @Module({
   imports: [
+    UserModule,
     PassportModule,
     JwtModule.registerAsync({
       useFactory: async () => {
@@ -20,7 +23,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
         };
       },
       inject: [ConfigService],
-    }),
+    })
   ],
   providers: [AuthService, JwtStrategy, SpotifyOauthStrategy],
   controllers: [AuthController],

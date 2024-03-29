@@ -1,20 +1,11 @@
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Provider/AuthProvider";
+import { redirect } from "react-router-dom";
 
 export default function Logout() {
-  	const { setToken } = useAuth();
-  	const navigate = useNavigate();
 
-  	if (!setToken) throw new Error("No setToken");
+	localStorage.clear();
+	redirect("/");
 
-  	const handleLogout = () => {
-    	setToken(null);
-    	navigate("/", { replace: true });
-  	};
-
-  	setTimeout(() => {
-    	handleLogout();
-  	}, 3 * 1000);
-
-  	return <>Logout Page</>;
+  	return (
+		<></>
+	)
 };

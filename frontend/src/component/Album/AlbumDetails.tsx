@@ -47,7 +47,6 @@ export default function AlbumDetails() {
 	}
 
 	useEffect(() => {
-		console.log(trackId, albumId)
 		if (albumId)
 			getAlbum();
 		else
@@ -91,7 +90,7 @@ export default function AlbumDetails() {
 				</div>
 				<div className="album-details-albums">
 					<div className="album-details-albums-header">
-						<h1>Albums</h1>
+						<h1>Other albums</h1>
 					</div>
 					<div className="album-details-albums-content">
 						{albums.map((album, index) => (

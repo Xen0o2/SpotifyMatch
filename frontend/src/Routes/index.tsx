@@ -12,14 +12,15 @@ import Statistics from "../component/Statistics/Statistics";
 import { useAuth } from "../Provider/AuthProvider";
 import { ProtectedRoute } from "./ProtectedRoute";
 import AlbumDetails from "../component/Album/AlbumDetails";
+import ArtistDetails from "../component/Artist/ArtistDetails";
 
 const Routes = () => {
 	const { token } = useAuth();
 
 	const routesForPublic = [
 		{
-			path: "/service",
-		  	element: <div>Service Page</div>,
+			path: "/login",
+		  	element: <Login />,
 		}
 	];
 	
@@ -30,6 +31,14 @@ const Routes = () => {
 			children: [
 				{
 					path: "/",
+					element: <Homepage children={<MyTop />}/>,
+				},
+				{
+					path: "/login",
+					element: <Homepage children={<MyTop />}/>,
+				},
+				{
+					path: "/redirect",
 					element: <Homepage children={<MyTop />}/>,
 				},
 				{
@@ -54,7 +63,7 @@ const Routes = () => {
 				},
 				{
 					path: "/artist/:artistId",
-					element: <Logout />,
+					element: <Homepage children={ <ArtistDetails />} />,
 				},
 				{
 					path: "/album/:albumId",

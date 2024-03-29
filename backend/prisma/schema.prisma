@@ -1,9 +1,59 @@
 
 generator client {
-  provider = "prisma-client-js"
+	provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+	provider = "postgresql"
+	url      = env("DATABASE_URL")
+}
+
+model User {
+	id						String			@id
+	username				String			@default("No username provided")
+	image					String
+	friends					User[]			@relation("Friends")
+	friendOf				User[]			@relation("Friends")
+	friendRequestsSent		FriendRequest[]	@relation("friendRequestsSent")
+	friendRequestsReceived	FriendRequest[]	@relation("friendRequestReceived")
+	ownedRooms				Room[]			@relation("ownedRooms")
+	rooms					Room[]			@relation("roomUsers")
+	likedMusics				Music[]			@relation("likedMusics")
+	dislikedMusics			Music[]			@relation("dislikedMusics")
+}
+
+model FriendRequest {
+	@@unique([fromId, toId])
+	id		String	@id	@default(uuid())
+	fromId	String
+	from	User	@relation("friendRequestsSent", fields: [fromId], references: [id] )
+	toId	String
+	to		User	@relation("friendRequestReceived", fields: [toId], references: [id] )
+	status	FriendRequestStatus
+}
+
+model Music {
+	id			String	@id
+	roomId		String	@unique
+	room		Room	@relation("roomMusics", fields: [roomId], references: [id])
+	name		String
+	image		String
+	likes		Int
+	likedBy		User[]	@relation("likedMusics")
+	dislikes	Int
+	dislikedBy	User[]	@relation("dislikedMusics")
+}
+
+model Room {
+	id		String 	@id @default(uuid())
+	ownerId	String
+	owner	User	@relation("ownedRooms", fields: [ownerId], references: [id])
+	users	User[]	@relation("roomUsers")
+	musics	Music[]	@relation("roomMusics")
+}
+
+enum FriendRequestStatus {
+	PENDING
+	ACCEPTED
+	DECLINED
 }

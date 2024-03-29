@@ -140,10 +140,22 @@ $darkGreen: #095826;
 
 	.spotify-small-track-section {
 		display: flex;
+		align-items: center;
 		gap: 10px;
 	}
 
 	.spotify-small-track-subtitle {
 		color: $grey;
+	}
+
+	.spotify-element-small-cover, .spotify-element-template-small-cover {
+		position: relative;
+		height: 30px;
+		object-fit: cover;
+		border-radius: 5px;
+		transition-duration: 0.2s;
+		background: linear-gradient(to right, $lightGrey 20%, $lightBlack 40%, $lightBlack 60%, $lightGrey 80%);
+		background-size: 200% auto;
+		animation: shine 1.5s linear infinite;
 	}
 }

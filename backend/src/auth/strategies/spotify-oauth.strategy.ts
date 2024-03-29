@@ -10,7 +10,7 @@ export class SpotifyOauthStrategy extends PassportStrategy(
       {
         clientID: process.env.SPOTIFY_CLIENT_ID,
         clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-        callbackURL: process.env.CALLBACK_URL,
+        callbackURL: `${process.env.URL}:${process.env.BACKEND_PORT}/auth/redirect`,
         scope:
           `user-read-private
            user-read-recently-played

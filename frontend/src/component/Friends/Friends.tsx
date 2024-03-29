@@ -1,69 +1,81 @@
-import { Link } from "react-router-dom";
+import "./Friends.scss"
+
+import image from "../../assets/images/login_image.png"
+import { useEffect, useState } from "react"
+import FriendElement from "./FriendElement/FriendElement"
+import { FriendRequest, User } from "../../Models/Database"
+import { useApi } from "../../Provider/ApiProvider"
+import Cookies from "js-cookie"
+import TemplateBigTracklist from "../Tracklist/BigTracklist/TemplateBigTracklist"
+
 
 export default function Friends() {
+
+	const api = useApi();
+	if (!api)
+		throw new Error("Api not found")
+
+	const [update, setUpdate] = useState(false);
+	const [friends, setFriends] = useState<User[]>([]);
+	const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+	const [loaded, setLoaded] = useState(0);
+
+	const getFriends = async () => {
+		try {
+			const response = await api.get(`/user/${Cookies.get("id")}/friends`);
+			console.log(response)
+			if (response)
+				setFriends(response.data)
+			else throw new Error("Request failed")
+			setLoaded(old => old + 1);
+		} catch(e) {
+			setLoaded(old => old + 1);
+			console.log(e)
+		}
+	}
+
+	const getFriendRequests = async () => {
+		try {
+			const response = await api.get(`/user/${Cookies.get("id")}/friends/pending`);
+			if (response)
+				setFriendRequests(response.data);
+			else throw new Error("Request failed");
+			setLoaded(old => old + 1);
+		} catch(e) {
+			setLoaded(old => old + 1);
+			console.log(e);
+		}
+	}
+
+	useEffect(() => {
+		getFriends();
+		getFriendRequests();
+	}, [update])
+
 	return (
 		<>
-		<div className="home-body-header">
-			<nav className="home-body-nav">
-				<li><Link to="/top" className="home-body-nav-element">My Top</Link></li>
-				<li><Link to="/friends" className="home-body-nav-element selected">Friends</Link></li>
-				<li><Link to="/statistics" className="home-body-nav-element">Statistics</Link></li>
-			</nav>
-			<div className="home-body-user">
-				<span>Alex</span>
-				<img src="https://c.wallhere.com/photos/2f/af/fire-145392.jpg!d" alt="" />
-			</div>
-		</div>
+		{update}
 		<div className="home-body-content">
-			<div className="home-body-category">
-				<div className="home-body-category-header">
-					<div className="home-body-category-title">
-						<h1>Top Tracks</h1>
-						<button>All time</button>
-					</div>
-					<button>Display all</button>
+			<div className="friend-content">
+				<div className="friend-header">
+					<h1>Your friends</h1>
 				</div>
-				<div className="home-body-leaderboard">
-					<div className="home-body-leaderboard-element">
-						<div className="home-body-leaderboard-rank">1</div>
-						<img src="https://i.scdn.co/image/ab67616d0000b2737a1bbe4ec7066c9db1d0f398" alt="" />
-						<div className="home-body-leaderboard-label">
-							<p className="home-body-leaderboard-label-title">Chlorine</p>
-							<p className="home-body-leaderboard-label-subtitle">Twenty One Pilots</p>
-						</div>
-					</div>
-					<div className="home-body-leaderboard-element">
-						<div className="home-body-leaderboard-rank">2</div>
-						<img src="https://i.scdn.co/image/ab67616d00001e029c0a340fc12d60625858ffde" alt="" />
-						<div className="home-body-leaderboard-label">
-							<p className="home-body-leaderboard-label-title">LOVE SUX</p>
-							<p className="home-body-leaderboard-label-subtitle">Marisa Maino</p>
-						</div>
-					</div>
-					<div className="home-body-leaderboard-element">
-						<div className="home-body-leaderboard-rank">3</div>
-						<img src="https://i.scdn.co/image/ab67616d00001e02352e5ec301a02278ffe53d14" alt="" />
-						<div className="home-body-leaderboard-label">
-							<p className="home-body-leaderboard-label-title">Hometown</p>
-							<p className="home-body-leaderboard-label-subtitle">Twenty One Pilots</p>
-						</div>
-					</div>
-					<div className="home-body-leaderboard-element">
-						<div className="home-body-leaderboard-rank">4</div>
-						<img src="https://i.scdn.co/image/ab67616d0000b273de5245e06fb45ca378d0238b" alt="" />
-						<div className="home-body-leaderboard-label">
-							<p className="home-body-leaderboard-label-title">BLAKE & MORTIMER</p>
-							<p className="home-body-leaderboard-label-subtitle">Luther</p>
-						</div>
-					</div>
-					<div className="home-body-leaderboard-element">
-						<div className="home-body-leaderboard-rank">5</div>
-						<img src="https://i.scdn.co/image/ab67616d0000b273f0a85efcd38babe36e4b0a49" alt="" />
-						<div className="home-body-leaderboard-label">
-							<p className="home-body-leaderboard-label-title">La vraie vie</p>
-							<p className="home-body-leaderboard-label-subtitle">BigFlo & Oli</p>
-						</div>
-					</div>
+				<div className="friend-list recent">
+					{ loaded !== 2 && <TemplateBigTracklist />}
+					{ loaded === 2 && friends.length === 0 && <span className="no-result">No friend yet</span>}
+					{ loaded === 2 && friends.map((friend, index) => (
+						<FriendElement user={friend} key={index} setUpdate={setUpdate} />
+					))}
+				</div>
+				<div className="friend-header">
+					<h1>Friend requests</h1>
+				</div>
+				<div className="friend-list pending">
+					{ loaded !== 2 && <TemplateBigTracklist />}
+					{ loaded === 2 && friendRequests.length === 0 && <span className="no-result">No friend request</span>}
+					{ loaded === 2 && friendRequests.map((request, index) => (
+						<FriendElement user={request.fromId === Cookies.get("id") ? request.to : request.from} key={index} setUpdate={setUpdate} />
+					))}
 				</div>
 			</div>
 		</div>

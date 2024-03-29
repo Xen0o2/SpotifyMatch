@@ -15,12 +15,14 @@ const passport_1 = require("@nestjs/passport");
 const jwt_1 = require("@nestjs/jwt");
 const config_1 = require("@nestjs/config");
 const jwt_strategy_1 = require("./strategies/jwt.strategy");
+const user_module_1 = require("../user/user.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
     (0, common_1.Module)({
         imports: [
+            user_module_1.UserModule,
             passport_1.PassportModule,
             jwt_1.JwtModule.registerAsync({
                 useFactory: async () => {
@@ -32,7 +34,7 @@ exports.AuthModule = AuthModule = __decorate([
                     };
                 },
                 inject: [config_1.ConfigService],
-            }),
+            })
         ],
         providers: [auth_service_1.AuthService, jwt_strategy_1.JwtStrategy, spotify_oauth_strategy_1.SpotifyOauthStrategy],
         controllers: [auth_controller_1.AuthController],

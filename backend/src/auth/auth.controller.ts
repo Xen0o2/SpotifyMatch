@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { SpotifyOauthGuard } from './guards/spotify-oauth.guard';
 import { Profile } from 'passport-spotify';
+import { UserService } from 'src/user/user.service';
 
 interface refreshTokens {
 	jwt_token: string;
@@ -13,7 +14,10 @@ interface refreshTokens {
 
 @Controller('auth')
 export class AuthController {
-	constructor(private readonly authService: AuthService) {}
+	constructor(
+		private readonly authService: AuthService,
+		private readonly userService: UserService
+	) {}
 
 	@UseGuards(SpotifyOauthGuard)
 	@Get('login')
@@ -39,7 +43,8 @@ export class AuthController {
 		}
 		req.user = undefined;
 		const jwt = this.authService.login(user);
-		res.redirect(`http://localhost:3000/redirect?jwt=${jwt}&access_token=${authInfo.accessToken}&refresh_token=${authInfo.refreshToken}`);
+		this.userService.create(user.id, user.displayName, (user.photos[user.photos.length - 1] as any)?.value || "https://image-cdn-ak.spotifycdn.com/image/ab67706c0000da8463bcdace67f79859e30a17fa")
+		res.redirect(`${process.env.URL}:${process.env.FRONTEND_PORT}/redirect?jwt=${jwt}&access_token=${authInfo.accessToken}&refresh_token=${authInfo.refreshToken}`);
 	}
 
 	// @Get("refresh/:jwt_token/:refresh_token")

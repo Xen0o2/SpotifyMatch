@@ -2,6 +2,15 @@ interface PaginTracks {
 	items: Track[];
 }
 
+export interface SpotifyUser {
+	id: string;
+	display_name?: string;
+	email: string;
+	country: string;
+	images?: Image[],
+	type: string;
+}
+
 export interface Track {
 	id: string;
 	name: string;

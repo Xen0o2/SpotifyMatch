@@ -1,0 +1,35 @@
+$lightBlack: #121212;
+$grey: #A7A7A7;
+$lightGrey: #212121;
+$green: #1CD760;
+$darkGreen: #095826;
+
+.no-result {
+	height: 10vh;
+	width: 100%;
+	color: white;
+	font-family: circular;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.friend-content {
+	width: 100%;
+	height: 100%;
+
+	.friend-header {
+		color: white;
+		margin-bottom: 10px;
+
+		&:not(:first-of-type) {
+			margin-top: 20px;
+		}
+	}
+
+	.friend-list {
+		display: flex;
+		gap: 0px 15px;
+		flex-wrap: wrap;
+	}
+}

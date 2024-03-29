@@ -1,0 +1,16 @@
+$lightBlack: #121212;
+$grey: #A7A7A7;
+$lightGrey: #2b2b2b;
+$green: #1CD760;
+$darkGreen: #095826;
+
+.user-popup-element {
+	color: $grey;
+	font-size: 1rem;
+	padding: 10px;
+
+	&:hover {
+		color: white;
+		// text-decoration: underline;
+	}
+}

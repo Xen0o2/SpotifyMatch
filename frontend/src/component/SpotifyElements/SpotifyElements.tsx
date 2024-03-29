@@ -39,7 +39,11 @@ export function SmallTrackElement({ track, referenceTrackId, index }: TrackEleme
 				{index != undefined && <span className="spotify-small-track-subtitle">{index + 1}</span>}
 				<span className="spotify-small-track-title">{track.name}</span>
 			</div>
-			<code className="spotify-small-track-subtitle">{formatDuration(track.duration_ms)}</code>
+			<div className="spotify-small-track-section">
+				<span className="spotify-small-track-subtitle">{track.album?.name}</span>
+				{track.album?.images && <img className="spotify-element-small-cover" src={track.album.images[0].url} style={{marginRight: "20px"}}/>}
+				<code className="spotify-small-track-subtitle">{formatDuration(track.duration_ms)}</code>
+			</div>
 		</Link>
 	)
 }

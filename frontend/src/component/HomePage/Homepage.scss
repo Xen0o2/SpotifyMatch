@@ -67,5 +67,114 @@ $darkGreen: #095826;
 		border-radius: 8px;
 		background: linear-gradient(to top, $lightBlack 75%, $darkGreen);
 		overflow: auto;
+
+		.home-body-header {
+			width: 100%;
+			margin-top: 30px;
+			display: flex;
+			justify-content: space-between;
+			gap: 30px;
+			align-items: flex-start;
+		
+			.home-body-nav {
+				margin-inline-start: 65px;
+				font-size: 2.5rem;
+				font-family: circularBold;
+				display: flex;
+				gap: 50px;
+				list-style-type: none;
+				
+				.home-body-nav-element {
+					display: block;
+					color: $grey;
+					text-decoration: none;
+					cursor: pointer;
+					transition-duration: 0.2s;
+					white-space: nowrap;
+		
+					&:hover {
+						color: white;
+						transform: scale(1.1);
+					}
+				}
+		
+				.selected {
+					color: white;
+					position: relative;
+				}
+		
+				.selected::before {
+					content: "";
+					width: 100%;
+					height: 3px;
+					background: $green;
+					color: $green;
+					position: absolute;
+					bottom: 0;
+					transform: translateY(10px);
+				}
+			}
+		
+			.home-body-search-input {
+				font-family: circular;
+				color: white;
+				width: 30%;
+				padding-inline: 20px;
+				padding-block: 15px;
+				border-radius: 500px;
+				font-size: 1rem;
+				border: none;
+				background-color: #242424;
+				transition-duration: 0.3s;
+		
+				&:hover {
+					outline: solid 2px rgba(255, 255, 255, 0.293);
+				}
+		
+				&:focus {
+					outline: solid 2px white;
+				}
+			}
+
+			.home-body-user {
+				display: flex;
+				margin-inline-end: 65px;
+				width: 8%;
+				min-width: 100px;
+				flex-direction: column;
+				padding: 5px 5px 5px 15px;
+				background-color: $lightBlack;
+				border-radius: 25px;
+				cursor: pointer;
+				transition-duration: 0.2s;
+				position: relative;
+		
+				&:hover {
+					background: $lightGrey;
+					transform: scale(1.1);
+				}
+		
+				.home-body-user-name {
+					font-size: 1.3rem;
+					font-family: circularBold;
+					color: white;
+				}
+		
+				img {
+					height: 40px;
+					width: 40px;
+					object-fit: cover;
+					border-radius: 500px;
+				}
+	
+				div {
+					width: 100%;
+					display: flex;
+					justify-content: space-between;
+					align-items: center;
+				}
+		
+			}
+		}		
 	}
 }
